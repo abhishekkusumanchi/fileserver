@@ -1,7 +1,7 @@
-/Users/abhi/Desktop/java/boot apps/fileserver/src/main/java/com/abhishek/fileserver/FileServerApplication.java
-/Users/abhi/Desktop/java/boot apps/fileserver/src/main/java/com/abhishek/fileserver/ServletInitializer.java
-/Users/abhi/Desktop/java/boot apps/fileserver/src/main/java/com/abhishek/fileserver/controllers/FileController.java
-/Users/abhi/Desktop/java/boot apps/fileserver/src/main/java/com/abhishek/fileserver/controllers/FileRestController.java
-/Users/abhi/Desktop/java/boot apps/fileserver/src/main/java/com/abhishek/fileserver/models/APIMessageResponse.java
-/Users/abhi/Desktop/java/boot apps/fileserver/src/main/java/com/abhishek/fileserver/models/FileDetails.java
-/Users/abhi/Desktop/java/boot apps/fileserver/src/main/java/com/abhishek/fileserver/models/ResponseMessage.java
+/Users/abhi/git/fileserver/src/main/java/com/abhishek/fileserver/FileServerApplication.java
+/Users/abhi/git/fileserver/src/main/java/com/abhishek/fileserver/ServletInitializer.java
+/Users/abhi/git/fileserver/src/main/java/com/abhishek/fileserver/controllers/FileController.java
+/Users/abhi/git/fileserver/src/main/java/com/abhishek/fileserver/controllers/FileRestController.java
+/Users/abhi/git/fileserver/src/main/java/com/abhishek/fileserver/models/APIMessageResponse.java
+/Users/abhi/git/fileserver/src/main/java/com/abhishek/fileserver/models/FileDetails.java
+/Users/abhi/git/fileserver/src/main/java/com/abhishek/fileserver/models/ResponseMessage.java

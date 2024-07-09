@@ -22,14 +22,17 @@ import org.springframework.web.multipart.MultipartFile;
 import com.abhishek.fileserver.models.FileDetails;
 import com.abhishek.fileserver.models.ResponseMessage;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/file")
 public class FileRestController {
 
 	@PostMapping("/createFolder")
 	public ResponseEntity<ResponseMessage> createFolder(@RequestParam String folderName,
-			@RequestParam String folderPath) {
-		String fullPath = File.separator + folderPath + File.separator + folderName;
+			@RequestParam String folderPath, HttpServletRequest request) {
+		String fullPath = request.getServletContext().getRealPath("home").split("webapp")[0] + "resources/static/"
+				+ folderPath + File.separator + folderName;
 		File newFolder = new File(fullPath);
 		ResponseMessage response = new ResponseMessage();
 
@@ -51,8 +54,9 @@ public class FileRestController {
 
 	@PostMapping("/uploadFile")
 	public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file,
-			@RequestParam("path") String uploadPath) {
-		Path uploadDir = Paths.get(uploadPath);
+			@RequestParam("path") String uploadPath, HttpServletRequest request) {
+		Path uploadDir = Paths.get(request.getServletContext().getRealPath("home").split("webapp")[0]
+				+ "resources\\static\\" + uploadPath);
 		ResponseMessage response = new ResponseMessage();
 
 		try {
@@ -72,16 +76,16 @@ public class FileRestController {
 	}
 
 	@GetMapping("/list")
-	public ResponseEntity<List<FileDetails>> listFiles(@RequestParam String folderPath) {
-		String fullPath = folderPath;
+	public ResponseEntity<List<FileDetails>> listFiles(@RequestParam String folderPath, HttpServletRequest request) {
+		String fullPath = request.getServletContext().getRealPath("home").split("webapp")[0] + "resources/static/"
+				+ folderPath;
+
+		System.out.println("List files method:" + fullPath);
+
 		File folder = new File(fullPath);
 		List<FileDetails> fileList = new ArrayList<>();
 
 		if (!folder.exists() || !folder.isDirectory()) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-		if (folderPath.toUpperCase().startsWith("C:") || folderPath.toUpperCase().startsWith("D:")) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
@@ -93,7 +97,7 @@ public class FileRestController {
 		for (File file : files) {
 			FileDetails fileDetails = new FileDetails();
 			fileDetails.setName(file.getName());
-			fileDetails.setPath(file.getAbsolutePath().replace("\\", "/"));
+			fileDetails.setPath(file.getAbsolutePath().replace("\\", "/").split("static")[1].substring(1));
 			fileDetails.setType(file.isDirectory() ? "folder" : "file");
 			fileList.add(fileDetails);
 		}
@@ -102,8 +106,9 @@ public class FileRestController {
 	}
 
 	@GetMapping("/download")
-	public ResponseEntity<byte[]> downloadFile(@RequestParam String filePath) {
-		String fullPath = filePath;
+	public ResponseEntity<byte[]> downloadFile(@RequestParam String filePath, HttpServletRequest request) {
+		String fullPath = request.getServletContext().getRealPath("home").split("webapp")[0] + "resources/static/"
+				+ filePath;
 		System.out.println(filePath);
 		File file = new File(fullPath);
 
@@ -125,6 +130,48 @@ public class FileRestController {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	@PostMapping("/delete")
+	public ResponseEntity<String> deleteFile(@RequestParam("filePath") String filePath, HttpServletRequest request) {
+
+		System.out.println("Delete controller got invoked");
+		filePath = request.getServletContext().getRealPath("home").split("webapp")[0] + "resources/static/"
+				+ filePath;
+		File file = new File(filePath);
+		if (!file.exists()) {
+			return ResponseEntity.status(404).body("File or folder not found");
+		}
+
+		try {
+			if (file.isDirectory()) {
+				deleteDirectory(file);
+			} else {
+				file.delete();
+			}
+			return ResponseEntity.ok("File or folder deleted successfully");
+		} catch (IOException e) {
+			return ResponseEntity.status(500).body("Error deleting file or folder: " + e.getMessage());
+		}
+	}
+
+	private void deleteDirectory(File directory) throws IOException {
+		if (!directory.exists()) {
+			return;
+		}
+
+		File[] files = directory.listFiles();
+		if (files != null) {
+			for (File file : files) {
+				if (file.isDirectory()) {
+					deleteDirectory(file);
+				} else {
+					file.delete();
+				}
+			}
+		}
+
+		directory.delete();
 	}
 
 }

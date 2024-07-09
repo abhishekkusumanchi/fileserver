@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <title>File Explorer</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+    .delete-button {
+        display: none; /* Initially hidden */
+    }
+    
+</style>
 </head>
 <body>
     <h1 id="currentPath">File Explorer</h1>
@@ -11,12 +17,13 @@
         <input type="file" name="file" /> 
         <input type="text" name="path" id="path" /> 
         <input type="submit" value="Upload" onclick="uploadFile()" />
+        <button type="button" id="toggleDeleteButtons">Toggle Delete Buttons</button>
     </form>
     <hr>
     <form id="createFolderForm">
-        <label for="folderName">Folder Name:</label> <input type="text"
-            id="folderName" name="folderName" required> <input
-            type="submit" value="Create Folder">
+        <label for="folderName">Folder Name:</label> 
+        <input type="text" id="folderName" name="folderName" required> 
+        <input type="submit" value="Create Folder">
     </form>
     <hr>
     <button id="btnPrevious">Previous</button>
@@ -25,12 +32,16 @@
         </ul>
     </div>
     <script>
-        var currentFolderPath = "E:/SFE"; // Initial folder path
+        var currentFolderPath = "home"; // Initial folder path
 
         $(document).ready(function() {
             $("#path").val(currentFolderPath);
             $("#path").hide();
             openFolder(currentFolderPath); // Initial call to list the root folder
+
+            $("#toggleDeleteButtons").click(function() {
+                $(".delete-button").toggle(); // Toggle visibility of all delete buttons
+            });
         });
 
         $("#btnPrevious").click(function() {
@@ -63,8 +74,10 @@
                         var li = $("<li>");
                         if (item.type === "folder") {
                             li.html("<button onclick=\"openFolder('" + item.path + "')\">" + item.name + "</button>");
+                            li.append(" <button class='delete-button' onclick=\"deleteItem('" + item.path + "')\">Delete</button>");
                         } else {
                             li.html("<a href='/file/download?filePath=" + item.path + "'>" + item.name + "</a>");
+                            li.append(" <button class='delete-button' onclick=\"deleteItem('" + item.path + "')\">Delete</button>");
                         }
                         $("#fileList").append(li);
                     });
@@ -116,6 +129,35 @@
                 }
             });
         }
+
+        function deleteItem(itemPath) {
+            // First confirmation
+            if (confirm("Are you sure you want to delete this item?")) {
+                // Second confirmation
+                if (confirm("Are you really sure you want to delete this item? This action cannot be undone.")) {
+                    $.ajax({
+                        url: "/file/delete",
+                        type: "POST",
+                        data: {
+                            filePath: itemPath
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            alert(response);
+                            openFolder(currentFolderPath);
+                        },
+                        error: function(xhr, status, error) {
+                            alert("Error deleting item: " + error);
+                        }
+                    });
+                } else {
+                    alert("Deletion cancelled.");
+                }
+            } else {
+                alert("Deletion cancelled.");
+            }
+        }
+
     </script>
 </body>
 </html>

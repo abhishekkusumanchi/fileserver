@@ -3,6 +3,8 @@ package com.abhishek.fileserver.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class FileController {
 	
@@ -11,8 +13,9 @@ public class FileController {
 	}
 	
 
-	@GetMapping(value = {"/home","/"})
-	public String home() {
+	@GetMapping(value = "/" )
+	public String home(HttpServletRequest request) {
+		System.out.println(request.getServletContext().getRealPath("home"));
 		return "index";
 	}
 	
