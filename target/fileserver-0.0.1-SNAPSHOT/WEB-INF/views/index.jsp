@@ -32,7 +32,7 @@
         </ul>
     </div>
     <script>
-        var currentFolderPath = "home"; // Initial folder path
+        var currentFolderPath = ""; // Initial folder path
 
         $(document).ready(function() {
             $("#path").val(currentFolderPath);
@@ -62,7 +62,7 @@
             currentFolderPath = folderPath;
             $("#path").val(currentFolderPath);
             $.ajax({
-                url: "/file/list",
+                url: "file/list",
                 type: "GET",
                 data: {
                     folderPath: folderPath
@@ -95,7 +95,7 @@
             var folderName = $("#folderName").val();
 
             $.ajax({
-                url: "/file/createFolder",
+                url: "file/createFolder",
                 type: "POST",
                 data: {
                     folderName: folderName,
@@ -115,7 +115,7 @@
             var formData = new FormData(document.getElementById("uploadForm"));
 
             $.ajax({
-                url: "/file/uploadFile", 
+                url: "file/uploadFile", 
                 type: "POST",
                 data: formData,
                 processData: false,
@@ -136,7 +136,7 @@
                 // Second confirmation
                 if (confirm("Are you really sure you want to delete this item? This action cannot be undone.")) {
                     $.ajax({
-                        url: "/file/delete",
+                        url: "file/delete",
                         type: "POST",
                         data: {
                             filePath: itemPath

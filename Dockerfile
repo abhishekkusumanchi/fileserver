@@ -1,21 +1,11 @@
-# Use a Maven image as base
-FROM maven:3.8.1-jdk-11-slim AS build
+# Use the official Tomcat base image with JDK 17
+FROM tomcat:10.1-jdk17
 
-# Set working directory
-WORKDIR /app
+# Copy the generated WAR file to the Tomcat webapps directory
+COPY target/fileserver.war /usr/local/tomcat/webapps/fileserver.war
 
-# Copy the Maven project file
-COPY pom.xml .
-
-# Fetch dependencies
-RUN mvn dependency:go-offline
-
-# Copy source code
-COPY src ./src
-
-
-# Expose the port your app runs on
+# Expose the default Tomcat port
 EXPOSE 8080
 
-# Command to run the application using spring-boot:run
-CMD ["mvn", "spring-boot:run"]
+# Use a shell to start Tomcat and create the static folder
+CMD ["sh", "-c", "catalina.sh run & while [ ! -d /usr/local/tomcat/webapps/fileserver ]; do sleep 1; done; mkdir -p /usr/local/tomcat/webapps/fileserver/static; tail -f /dev/null"]

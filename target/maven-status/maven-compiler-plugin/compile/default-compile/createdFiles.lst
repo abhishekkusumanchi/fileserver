@@ -1,7 +1,0 @@
-com/abhishek/fileserver/FileServerApplication.class
-com/abhishek/fileserver/models/ResponseMessage.class
-com/abhishek/fileserver/controllers/FileRestController.class
-com/abhishek/fileserver/ServletInitializer.class
-com/abhishek/fileserver/controllers/FileController.class
-com/abhishek/fileserver/models/APIMessageResponse.class
-com/abhishek/fileserver/models/FileDetails.class

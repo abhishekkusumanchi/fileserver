@@ -15,7 +15,7 @@ public class FileController {
 
 	@GetMapping(value = "/" )
 	public String home(HttpServletRequest request) {
-		System.out.println(request.getServletContext().getRealPath("home"));
+		System.out.println(request.getServletContext().getRealPath("static"));
 		return "index";
 	}
 	
