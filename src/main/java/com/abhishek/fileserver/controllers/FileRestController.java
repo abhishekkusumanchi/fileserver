@@ -34,7 +34,7 @@ public class FileRestController {
     @PostMapping("/createFolder")
     public ResponseEntity<ResponseMessage> createFolder(@RequestParam String folderName,
             @RequestParam String folderPath, HttpServletRequest request) {
-        String fullPath = request.getServletContext().getRealPath("static") + File.separator + folderPath + File.separator + folderName;
+        String fullPath = request.getServletContext().getRealPath("static").split("static")[0]+"WEB-INF/classes/static"  + File.separator + folderPath + File.separator + folderName;
         File newFolder = new File(fullPath);
         ResponseMessage response = new ResponseMessage();
 
@@ -60,7 +60,7 @@ public class FileRestController {
     @PostMapping("/uploadFile")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file,
             @RequestParam("path") String uploadPath, HttpServletRequest request) {
-        Path uploadDir = Paths.get(request.getServletContext().getRealPath("static") + File.separator + uploadPath);
+        Path uploadDir = Paths.get(request.getServletContext().getRealPath("static").split("static")[0]+"WEB-INF/classes/static"  + File.separator + uploadPath);
         ResponseMessage response = new ResponseMessage();
 
         try {
@@ -83,7 +83,7 @@ public class FileRestController {
 
     @GetMapping("/list")
     public ResponseEntity<List<FileDetails>> listFiles(@RequestParam String folderPath, HttpServletRequest request) {
-        String fullPath = request.getServletContext().getRealPath("static") + File.separator + folderPath;
+        String fullPath = request.getServletContext().getRealPath("static").split("static")[0]+"WEB-INF/classes/static"  + File.separator + folderPath;
         logger.info("List files method: " + fullPath);
 
         File folder = new File(fullPath);
@@ -111,7 +111,7 @@ public class FileRestController {
 
     @GetMapping("/download")
     public ResponseEntity<byte[]> downloadFile(@RequestParam String filePath, HttpServletRequest request) {
-        String fullPath = request.getServletContext().getRealPath("static") + File.separator + filePath;
+        String fullPath = request.getServletContext().getRealPath("static").split("static")[0]+"WEB-INF/classes/static" + File.separator + filePath;
         logger.info("Download file method: " + fullPath);
 
         File file = new File(fullPath);
@@ -140,7 +140,7 @@ public class FileRestController {
     @PostMapping("/delete")
     public ResponseEntity<String> deleteFile(@RequestParam("filePath") String filePath, HttpServletRequest request) {
         logger.info("Delete controller got invoked");
-        filePath = request.getServletContext().getRealPath("static") + File.separator + filePath;
+        filePath = request.getServletContext().getRealPath("static").split("static")[0]+"WEB-INF/classes/static" + File.separator + filePath;
         File file = new File(filePath);
         if (!file.exists()) {
             return ResponseEntity.status(404).body("File or folder not found");

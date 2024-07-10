@@ -15,7 +15,7 @@ public class FileController {
 
 	@GetMapping(value = "/" )
 	public String home(HttpServletRequest request) {
-		System.out.println(request.getServletContext().getRealPath("static"));
+		System.out.println(request.getServletContext().getRealPath("static").split("static")[0]+"WEB-INF/classes/static" );
 		return "index";
 	}
 	
