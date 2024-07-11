@@ -16,7 +16,7 @@
     <form id="uploadForm" enctype="multipart/form-data">
         <input type="file" name="file" /> 
         <input type="text" name="path" id="path" /> 
-        <input type="submit" value="Upload" onclick="uploadFile()" />
+        <input type="button" value="Upload" onclick="uploadFile()" />
         <button type="button" id="toggleDeleteButtons">Toggle Delete Buttons</button>
     </form>
     <hr>
@@ -76,7 +76,7 @@
                             li.html("<button onclick=\"openFolder('" + item.path + "')\">" + item.name + "</button>");
                             li.append(" <button class='delete-button' onclick=\"deleteItem('" + item.path + "')\">Delete</button>");
                         } else {
-                            li.html("<a href='/file/download?filePath=" + item.path + "'>" + item.name + "</a>");
+                            li.html("<a href='file/download?filePath=" + item.path + "'>" + item.name + "</a>");
                             li.append(" <button class='delete-button' onclick=\"deleteItem('" + item.path + "')\">Delete</button>");
                         }
                         $("#fileList").append(li);
@@ -113,7 +113,7 @@
 
         function uploadFile() {
             var formData = new FormData(document.getElementById("uploadForm"));
-
+			alert("upload file function invoked");
             $.ajax({
                 url: "file/uploadFile", 
                 type: "POST",
